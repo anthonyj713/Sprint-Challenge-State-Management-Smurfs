@@ -1,21 +1,10 @@
-import axios from 'axios';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { SmurfsContext } from './App';
 
-function GetSmurf() {
-    const [smurf, setSmurf] = useState([]);
-        useEffect(() => {
-            axios.get("http://localhost:3333/smurfs")
-            .then(res => {
-            console.log('res',res);
-            setSmurf(res.data);
-            })
-            .catch(error => {
-            console.log("the data was not returned", error)
-        })
-        },[])
-        console.log('smurf', smurf)
-        return (
+const GetSmurf = () => {
+   return (
+       <SmurfsContext.Consumer>
+           {smurf => (
             <div>
               {smurf.map((smurf) => (
                 <div className='getSmurf' key={smurf.id}>
@@ -25,9 +14,9 @@ function GetSmurf() {
                 </div>
               ))}
             </div>
+            )}
+        </SmurfsContext.Consumer>
             
       )
-      
-     
-    }
+      }
       export default GetSmurf;
