@@ -1,11 +1,13 @@
 import React, { Component, createContext, useState, useEffect } from "react";
 import "./App.css";
 import GetSmurf from './getSmurf';
-import FormikCreateSmurf from './createSmurf';
+import CreateSmurf from './createSmurf';
 import axios from 'axios';
 
 
+
 export const SmurfsContext = createContext();
+
 
 export default function App() {
   const [smurf, setSmurf] = useState([]);
@@ -19,7 +21,24 @@ export default function App() {
       console.log("the data was not returned", error)
   })
   },[])
-  console.log('smurf', smurf)
+  
+  const handleSubmit = (values) => {
+    console.log('values object:', values);
+  
+    axios
+        .post('http://localhost:3333/smurfs', values)
+        .then(res => {
+            console.log('values object:', values);
+            console.log('info from api', res.data );
+            setSmurf(res.data);
+        })
+        .catch(err => {
+            console.log('values object from err:', values)
+            console.log(err)
+        }
+    )
+  
+  }
     return (
       <div className="App">
         <SmurfsContext.Provider value={smurf}>
@@ -27,7 +46,7 @@ export default function App() {
         <div>Welcome to your state management version of Smurfs!</div>
         <div>Start inside of your `src/index.js` file!</div>
         <div>Have fun!</div>
-        <FormikCreateSmurf/>
+        <CreateSmurf  handleSubmit={handleSubmit}/>
         <GetSmurf/>
         </SmurfsContext.Provider>
       </div>
